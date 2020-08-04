@@ -1,22 +1,27 @@
-package Main;
+package sp4.sp4_test05;
 
 import java.util.Scanner;
 
-import Main.DTO.MemberDao;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+
 import Main.DTO.RegisterRequest;
-import Main.service.Assembler;
 import Main.service.ChangePasswordService;
 import Main.service.MemberInfoPrinter;
 import Main.service.MemberListPrinter;
-import Main.service.MemberPrinter;
 import Main.service.MemberRegisterService;
 
+/**
+ * Hello world!
+ *
+ */
 public class App {
-	private static Assembler assembler = new Assembler();
+	private static GenericXmlApplicationContext ctx;
 	public static void main(String[] args) {
+		ctx = new GenericXmlApplicationContext("classpath:appCtx.xml");
 		Scanner sc = new Scanner(System.in);
 		while (true) {
-			System.out.println("¸í·É¾î¸¦ ÀÔ·ÂÇÏ¼¼¿ä : ");
+			System.out.println("ëª…ë ¹ì–´ë¥¼ ì…ë ¥í•˜ì„¸ìš” : ");
 			String command = sc.nextLine();
 			if (command.startsWith("new")) {
 				String [] arg = command.split(" ");
@@ -25,7 +30,7 @@ public class App {
 					System.out.println();
 					continue;
 				}
-				// ÀÇÁ¸ °´Ã¼
+				// ì˜ì¡´ ê°ì²´
 				RegisterRequest req = new RegisterRequest();
 				req.setEmail(arg[1]);
 				req.setName(arg[2]);
@@ -33,10 +38,10 @@ public class App {
 				req.setConfirmPassword(arg[4]);
 				boolean bl = req.isPasswordEqualConfirmPassword();
 				if (!bl) {
-					System.out.println("ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+					System.out.println("ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 					continue;
 				}
-				MemberRegisterService mrs = assembler.getMemberRegisterService();
+				MemberRegisterService mrs = ctx.getBean("memberRegisterService", MemberRegisterService.class);
 				mrs.regist(req);
 				
 			} else if (command.startsWith("change")) {
@@ -45,11 +50,11 @@ public class App {
 					printHelp();
 					continue;
 				}
-				ChangePasswordService changePwdSvc = assembler.getChangePasswordService();
+				ChangePasswordService changePwdSvc = ctx.getBean("changePasswordService", ChangePasswordService.class);
 				changePwdSvc.changePassword(arg[1], arg[2], arg[3]);
 				
 			} else if (command.startsWith("list")) {
-				MemberListPrinter listPrint = assembler.getMemberListPrinter();
+				MemberListPrinter listPrint = ctx.getBean("memberListPrinter", MemberListPrinter.class);
 				listPrint.printAll();
 				
 			} else if (command.startsWith("info")) {
@@ -58,11 +63,11 @@ public class App {
 					printHelp();
 					continue;
 				}
-				MemberInfoPrinter infoPrinter = assembler.getMemberInfoPrinter();
+				MemberInfoPrinter infoPrinter = ctx.getBean("memberInfoPrinter", MemberInfoPrinter.class);
 				infoPrinter.printMemberInfo(arg[1]);
 				
 			} else if (command.startsWith("exit")) {
-				System.out.println("ÇÁ·Î±×·¥ÀÌ Á¾·áµÇ¾ú½À´Ï´Ù.");
+				System.out.println("í”„ë¡œê·¸ë¨ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
 				System.exit(0);
 				
 			} else {
@@ -73,12 +78,11 @@ public class App {
 	
 	public static void printHelp() {
 		System.out.println();
-		System.out.println("¸í·É¾î »ç¿ë¹ı:");
-		System.out.println("new ÀÌ¸ŞÀÏ ÀÌ¸§ ¾ÏÈ£ ¾ÏÈ£È®ÀÎ");
-		System.out.println("change ÀÌ¸ŞÀÏ ÇöÀçºñ¹ø º¯°æºñ¹ø");
+		System.out.println("ëª…ë ¹ì–´ ì‚¬ìš©ë²•:");
+		System.out.println("new ì´ë©”ì¼ ì´ë¦„ ì•”í˜¸ ì•”í˜¸í™•ì¸");
+		System.out.println("change ì´ë©”ì¼ í˜„ì¬ë¹„ë²ˆ ë³€ê²½ë¹„ë²ˆ");
 		System.out.println("list");
-		System.out.println("info ÀÌ¸ŞÀÏ");
-		System.out.println("ÇÁ·Î±×·¥ Á¾·á´Â exit");
+		System.out.println("info ì´ë©”ì¼");
+		System.out.println("í”„ë¡œê·¸ë¨ ì¢…ë£ŒëŠ” exit");
 	}
-	
 }

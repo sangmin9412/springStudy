@@ -17,8 +17,6 @@ public class Assembler {
 		this.memberListPrinter = new MemberListPrinter(memberDao, printer);
 		this.changePasswordService = new ChangePasswordService(memberDao);
 		this.memberInfoPrinter = new MemberInfoPrinter();
-		this.memberInfoPrinter.setMemberDao(memberDao);
-		this.memberInfoPrinter.setMemberPrinter(printer);
 	}
 
 	public MemberDao getMemberDao() {
@@ -42,6 +40,8 @@ public class Assembler {
 	}
 
 	public MemberInfoPrinter getMemberInfoPrinter() {
+		memberInfoPrinter.setMemberDao(memberDao);
+		memberInfoPrinter.setMemberPrinter(printer);
 		return memberInfoPrinter;
 	}
 	
