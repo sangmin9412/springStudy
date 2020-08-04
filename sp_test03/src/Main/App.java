@@ -2,14 +2,17 @@ package Main;
 
 import java.util.Scanner;
 
+import Main.DTO.MemberDao;
 import Main.DTO.RegisterRequest;
 import Main.service.ChangePasswordService;
 import Main.service.MemberInfoPrinter;
 import Main.service.MemberListPrinter;
+import Main.service.MemberPrinter;
 import Main.service.MemberRegisterService;
 
 public class App {
-	
+	private static MemberDao memberDao = new MemberDao();
+	private static MemberPrinter printer = new MemberPrinter();
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		while (true) {
@@ -35,7 +38,7 @@ public class App {
 					continue;
 				}
 				// ÀÇÁ¸ °´Ã¼
-				MemberRegisterService mrs = new MemberRegisterService();
+				MemberRegisterService mrs = new MemberRegisterService(memberDao);
 				mrs.regist(req);
 				
 			} else if (command.startsWith("change")) {
@@ -44,11 +47,11 @@ public class App {
 					printHelp();
 					continue;
 				}
-				ChangePasswordService changePwdSvc = new ChangePasswordService();
+				ChangePasswordService changePwdSvc = new ChangePasswordService(memberDao);
 				changePwdSvc.changePassword(arg[1], arg[2], arg[3]);
 				
 			} else if (command.startsWith("list")) {
-				MemberListPrinter listPrint = new MemberListPrinter();
+				MemberListPrinter listPrint = new MemberListPrinter(memberDao, printer);
 				listPrint.printAll();
 				
 			} else if (command.startsWith("info")) {
@@ -58,6 +61,8 @@ public class App {
 					continue;
 				}
 				MemberInfoPrinter infoPrinter = new MemberInfoPrinter();
+				infoPrinter.setMemberDao(memberDao);
+				infoPrinter.setMemberPrinter(printer);
 				infoPrinter.printMemberInfo(arg[1]);
 				
 			} else if (command.startsWith("exit")) {

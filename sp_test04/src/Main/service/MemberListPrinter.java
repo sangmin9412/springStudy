@@ -6,8 +6,14 @@ import Main.DTO.MemberDTO;
 import Main.DTO.MemberDao;
 
 public class MemberListPrinter {
-	private MemberDao memberDao = new MemberDao();
-	private MemberPrinter printer = new MemberPrinter(); 	
+	private MemberDao memberDao;
+	private MemberPrinter printer;
+	
+	// 의존객체 주입 : Dependency Injection(DI)
+	public MemberListPrinter(MemberDao memberDao, MemberPrinter printer) {
+		this.memberDao = memberDao;
+		this.printer = printer;
+	}
 	
 	public void printAll() {
 		Collection<MemberDTO> lists =  memberDao.selectAll();

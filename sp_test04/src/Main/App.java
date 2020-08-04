@@ -2,15 +2,18 @@ package Main;
 
 import java.util.Scanner;
 
+import Main.DTO.MemberDao;
 import Main.DTO.RegisterRequest;
+import Main.service.Assembler;
 import Main.service.ChangePasswordService;
 import Main.service.MemberInfoPrinter;
 import Main.service.MemberListPrinter;
+import Main.service.MemberPrinter;
 import Main.service.MemberRegisterService;
 
 public class App {
-	
 	public static void main(String[] args) {
+		Assembler ab = new Assembler();
 		Scanner sc = new Scanner(System.in);
 		while (true) {
 			System.out.println("명령어를 입력하세요 : ");
@@ -35,7 +38,7 @@ public class App {
 					continue;
 				}
 				// 의존 객체
-				MemberRegisterService mrs = new MemberRegisterService();
+				MemberRegisterService mrs = ab.getMemberRegisterService();
 				mrs.regist(req);
 				
 			} else if (command.startsWith("change")) {
@@ -44,11 +47,11 @@ public class App {
 					printHelp();
 					continue;
 				}
-				ChangePasswordService changePwdSvc = new ChangePasswordService();
+				ChangePasswordService changePwdSvc = ab.getChangePasswordService();
 				changePwdSvc.changePassword(arg[1], arg[2], arg[3]);
 				
 			} else if (command.startsWith("list")) {
-				MemberListPrinter listPrint = new MemberListPrinter();
+				MemberListPrinter listPrint = ab.getMemberListPrinter();
 				listPrint.printAll();
 				
 			} else if (command.startsWith("info")) {
@@ -57,7 +60,7 @@ public class App {
 					printHelp();
 					continue;
 				}
-				MemberInfoPrinter infoPrinter = new MemberInfoPrinter();
+				MemberInfoPrinter infoPrinter = ab.getMemberInfoPrinter();
 				infoPrinter.printMemberInfo(arg[1]);
 				
 			} else if (command.startsWith("exit")) {

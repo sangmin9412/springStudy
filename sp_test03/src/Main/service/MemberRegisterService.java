@@ -8,7 +8,13 @@ import Main.DTO.RegisterRequest;
 
 public class MemberRegisterService {
 	// ¿«¡∏ ∞¥√º
-	private MemberDao memberDao = new MemberDao();
+	private MemberDao memberDao;
+	
+	// ¿«¡∏∞¥√º ¡÷¿‘ : Dependency Injection(DI)
+	public MemberRegisterService(MemberDao memberDao) {
+		this.memberDao = memberDao;
+	}
+	
 	public void regist (RegisterRequest req) {
 		MemberDTO dto = memberDao.selectByEmail(req.getEmail());
 		if (dto == null) {
