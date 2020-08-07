@@ -34,14 +34,14 @@ $(function(){
 <form:form action="login" name="frm" id="frm" method="post" commandName="loginCommand">
 <table border="1">
 <tr><td colspan="3">
-자동로그인<input type="checkbox" name="autologin" value="auto">
+자동로그인<input type="checkbox" name="autoLogin">
 &nbsp;&nbsp;&nbsp;&nbsp;
-아이디 저장 <input type="checkbox" name="idStore" value="store" 
-<c:if test = "${!empty isId}"> checked </c:if>  /></td>
+아이디 저장 <input type="checkbox" name="idStore" 
+<c:if test="${!empty isId}"> checked </c:if>  /></td>
 </td></tr>
 <tr>
 <td>아이디</td>
-<td><form:input path="userId" id="userId" />
+<td><form:input path="userId" id="userId" value="${ isId }" />
 	<form:errors path="userId" />
 </td>
 <td rowspan=2><input type="image" src="images/img1.jpg" width="80" height="80" id="imgSubmit">
@@ -67,7 +67,7 @@ $(function(){
 <c:if test="${!empty authInfo }">
 <!-- 로그인 된 경우 -->
 <a href="mem/memberDetail">내정보</a>
-<a href="login/logout">로그아웃</a>
+<a href="<c:url value="/login/logout" />">로그아웃</a>
 <a href="mem/meberList">회원리스트</a>
 <a href="qna/qnaList">공지사항 게시판</a>
 <a href="lib/libBoardList">자료 게시판</a>
