@@ -5,7 +5,8 @@
 		"http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
-	<bean class="controller.main.MainController" />
-	<bean id="mailService" class="controller.MailService" />
-	<bean class="controller.main.LoginController" />
+	<bean class="controller.member.MemberController" />
+	<bean id="memberJoinService" class="service.member.MemberJoinService" />
+	<bean id="memberRepository" class="repository.MemberRepository" />
+	<bean id="authService" class="service.member.AuthService" />
 </beans>

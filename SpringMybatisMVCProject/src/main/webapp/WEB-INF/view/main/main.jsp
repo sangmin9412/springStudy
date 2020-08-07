@@ -1,4 +1,4 @@
-<%@ page isELIgnored="false" language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/include.jsp" %>
 <!DOCTYPE html>
@@ -9,6 +9,7 @@
 <script type="text/javascript" 
 	src="http://code.jquery.com/jquery-latest.js" ></script>
 <script>
+/*
 $(function(){
 	$("#imgSubmit").click(function(){
 		if($("#userId").val()== ""){
@@ -24,12 +25,13 @@ $(function(){
 		$("#frm").submit();
 	});
 });
+*/
 </script>
 </head>
 <body>
-<c:if test="${empty logId }">
+<c:if test="${empty authInfo }">
 <!-- 로그인 안 된 경우 -->
-<form action="login/loginPro.main" name="frm" id="frm" method="post">
+<form:form action="login" name="frm" id="frm" method="post" commandName="loginCommand">
 <table border="1">
 <tr><td colspan="3">
 자동로그인<input type="checkbox" name="autologin" value="auto">
@@ -39,32 +41,33 @@ $(function(){
 </td></tr>
 <tr>
 <td>아이디</td>
-<td><input type="text" name="userId" id="userId" value="${isId}">
-	<div id ="idmsg"></div>
+<td><form:input path="userId" id="userId" />
+	<form:errors path="userId" />
 </td>
 <td rowspan=2><input type="image" src="images/img1.jpg" width="80" height="80" id="imgSubmit">
 </td>
 <tr>
 <td>비밀번호</td>
-<td><input type="password" name="userPw" id="userPw">
-	<div id="pwmsg"></div>
+<td><form:password path="userPw" id="userPw" />
+	<form:errors path="userPw" />
+</div>
 </td>
 </tr>
 
 <tr>
 <td colspan="3">
-<a href="mem/memberAgree.mem">회원가입</a>&nbsp;
+<a href="register/agree">회원가입</a>&nbsp;
 <a href="mem/idCk.mem">아이디 찾기</a>&nbsp;
 <a href="">비밀번호 찾기</a>&nbsp;
 </td>
 </tr>
 </table>
-</form>
+</form:form>
 </c:if>
-<c:if test="${!empty logId }">
+<c:if test="${!empty authInfo }">
 <!-- 로그인 된 경우 -->
 <a href="mem/memberDetail">내정보</a>
-<a href="login/logOutPro">로그아웃</a>
+<a href="login/logout">로그아웃</a>
 <a href="mem/meberList">회원리스트</a>
 <a href="qna/qnaList">공지사항 게시판</a>
 <a href="lib/libBoardList">자료 게시판</a>
