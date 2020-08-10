@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mappers.member.memberMapper">
+	<sql id="basecolumn">
+		USER_ID, 
+		USER_PW, 
+		USER_NAME, 
+		USER_BIRTH, 
+		USER_GENDER, 
+		USER_EMAIL, 
+		USER_ADDR, 
+		USER_PH1, 
+		USER_PH2, 
+		INTEREST, 
+		USER_REGIST
+	</sql>
+	<insert id="insertMember" parameterType="mem">
+		insert into member(<include refid="basecolumn" />)
+		values(
+			#{userId}, 
+			#{userPw}, 
+			#{userName}, 
+			#{userBirth}, 
+			#{userGender}, 
+			#{userEmail}, 
+			#{userAddr}, 
+			#{userPh1}, 
+			#{userPh2}, 
+			#{interest},
+			sysdate
+		)
+	</insert>
+	<update id="joinOkUpdate" parameterType="mem">
+		update member
+		set join_ok = #{joinOk}
+		where user_id = #{userId} and USER_EMAIL = #{userEmail} 
+		and join_ok is null
+	</update>
+	<update id="memberUpdate" parameterType="mem">
+		update member
+		<trim prefix="set" suffixOverrides=",">
+			<if test="userEmail != null">user_email = #{userEmail},</if>
+			<if test="userAddr != null">user_addr = #{userAddr},</if>
+			<if test="userPh1 !=null"> user_ph1 = #{userPh1},</if>
+			<if test="userPh2 !=null"> user_ph2 = #{userPh2},</if>
+		</trim>
+		where user_Id = #{userId}
+	</update>
+	<update id="passwordUpdate" parameterType="mem">
+		update member
+		set user_pw = #{userPw}
+		where user_id = #{userId} and user_email = #{userEmail}
+	</update>
+	
+	<resultMap type="mem" id="baseMember">
+		<id column="user_id" jdbcType="VARCHAR" property="userId" />
+		<result column="user_pw" jdbcType="VARCHAR" property="userPw" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="user_birth" jdbcType="TIMESTAMP" property="userBirth" />
+		<result column="user_gender" jdbcType="VARCHAR" property="userGender" />
+		<result column="user_addr" jdbcType="VARCHAR" property="userAddr" />
+		<result column="user_ph1" jdbcType="VARCHAR" property="userPh1" />
+		<result column="user_ph2" jdbcType="VARCHAR" property="userPh2" />
+		<result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+		<result column="user_regist" jdbcType="TIMESTAMP" property="userRegist" />
+		<result column="interest" jdbcType="VARCHAR" property="interest" />
+	</resultMap>
+	
+	<select id="selectMember" parameterType="mem" resultMap="baseMember">
+		select * 
+			from(select rownum rn, <include refid="basecolumn" />
+				from(
+					select <include refid="basecolumn" />
+					from member
+					<trim prefix="where" prefixOverrides="AND | OR">
+						<if test="userPw != null">
+							user_pw = #{userPw}
+						</if>
+						<if test="userId != null">
+							and user_id = #{userId} and join_ok is not null
+						</if>
+						<if test="joinOk != null">
+							and user_id = #{userId}
+						</if>
+					</trim>
+				order by USER_REGIST desc
+			  )
+			)
+		where rn between #{startEndPageDTO.startPage} 
+		and #{startEndPageDTO.endPage}
+	</select>
+	<select id="getMemberCount" resultType="int">
+		select count(*) from member 
+	</select>
+</mapper>
