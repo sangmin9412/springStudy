@@ -15,7 +15,7 @@ $(function(){
 	});
 	$("#memDel").click(function(){
 		if(confirm("정말 진짜로 사실 리얼 탈퇴?")){
-			location.href="memberDel?id=${memberCommand.userId}"
+			location.href="<c:url value='/edit/memberUserDel' />"
 		}
 	});
 });

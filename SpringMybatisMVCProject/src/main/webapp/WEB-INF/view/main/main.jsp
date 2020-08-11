@@ -9,7 +9,6 @@
 <script type="text/javascript" 
 	src="http://code.jquery.com/jquery-latest.js" ></script>
 <script>
-/*
 $(function(){
 	$("#imgSubmit").click(function(){
 		if($("#userId").val()== ""){
@@ -25,7 +24,6 @@ $(function(){
 		$("#frm").submit();
 	});
 });
-*/
 </script>
 </head>
 <body>
@@ -69,7 +67,7 @@ $(function(){
 <a href="mem/memberDetail">내정보</a>
 <a href="<c:url value="/login/logout" />">로그아웃</a>
 <a href="mem/memberList">회원리스트</a>
-<a href="qna/qnaList">공지사항 게시판</a>
+<a href="qna/boardList">공지사항 게시판</a>
 <a href="lib/libBoardList">자료 게시판</a>
 <a href="ans/ansBoardList"">답변형 게시판</a>
 <a href="gd/goodsList">상품목록</a>

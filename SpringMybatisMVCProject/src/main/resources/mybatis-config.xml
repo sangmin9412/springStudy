@@ -9,6 +9,7 @@
 		<setting value="PARTIAL" name="autoMappingBehavior"/>
 	</settings>
 	<typeAliases>
+		<typeAlias type="model.BoardDTO" alias="board" />
 		<typeAlias type="model.MemberDTO" alias="mem" />
 	</typeAliases>
 </configuration>

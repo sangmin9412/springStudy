@@ -18,4 +18,5 @@
 	<bean id ="findPasswordService" class="service.member.FindPasswordService" />
 	<bean id = "passwordChangeService" class="service.member.PasswordChangeService" />
 	<bean id ="memberPasswordService" class="service.member.MemberPasswordService" />
+	<bean id ="memberUserDelService" class="service.member.MemberUserDelService" />
 </beans>

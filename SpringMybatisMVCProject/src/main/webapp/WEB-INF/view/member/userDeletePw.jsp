@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,8 +23,9 @@ $(function(){
 </script>	
 </head>
 <body>
-<form action = "memberUserDelPro.mem" method="post" name="frm" id ="frm">
+<form action = "memberUserDelPro" method="post" name="frm" id ="frm">
 	비밀번호 : <input type="password" name = "userPw" id = "pw" /><br />
+	<div>${ err }</div>
 	<br />
 	<input type="button" value="확인" id ="bts" />
 </form>

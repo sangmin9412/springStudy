@@ -31,6 +31,7 @@ version="3.0">
   			classpath:spring-jdbc.xml
   			classpath:spring-beans.xml
   			classpath:spring-member.xml
+  			classpath:spring-board.xml
   			classpath:spring-mail-config.xml
   		</param-value>
   	</init-param>

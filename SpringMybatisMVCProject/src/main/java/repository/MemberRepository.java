@@ -48,5 +48,9 @@ public class MemberRepository {
 		statement = namespace + ".selectMember";
 		return sqlSession.selectList(statement, memberDTO);
 	}
+	public void memberDelete(String userId) {
+		statement = namespace + ".memberDelete";
+		sqlSession.update(statement, userId);
+	}
 	
 }

@@ -1,5 +1,6 @@
 package controller.member;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import service.member.FindPasswordService;
 import service.member.MemberDetailService;
 import service.member.MemberModifyService;
 import service.member.MemberPasswordService;
+import service.member.MemberUserDelService;
 import service.member.PasswordChangeService;
 import validator.MemberModifyProVaildator;
 import validator.MemberPasswordValidator;
@@ -32,10 +34,26 @@ public class MemberEditController {
 	PasswordChangeService passwordChangeService;
 	@Autowired
 	MemberPasswordService memberPasswordService;
+	@Autowired
+	MemberUserDelService memberUserDelService;
 	@RequestMapping("memberModify")
 	public String memberModify(
-			@RequestParam(value = "userId") String userId, Model model) {
+			@RequestParam(value = "userId") String userId, Model model, HttpServletRequest request) {
 		memberDetailService.memberDetail(userId, model);
+		
+		/*
+		String [] url = request.getHeader("refere").replace("http://", "").split("/");
+		String path = "";
+		for (int i = 0; i < url.length; i++) {
+			if (i == 0) continue;
+			path += "/" + url[i];
+		}
+		System.out.println(path);
+		*/
+		String contextPath = request.getContextPath();
+		String path = request.getHeader("referer").substring(
+				request.getHeader("referer").indexOf(contextPath) + contextPath.length());		
+		model.addAttribute("urlPath", path);
 		return "member/memberModify";
 	}
 	@RequestMapping("memberModifyPro")
@@ -44,9 +62,10 @@ public class MemberEditController {
 			Model model) {
 		new MemberModifyProVaildator().validate(memberCommand, errors);
 		if(errors.hasErrors()) {
+			model.addAttribute("urlPath", memberCommand.getUrlPath());
 			return "member/memberModify";
 		}
-		String path = memberModifyService.memberUpdate(memberCommand, errors); 
+		String path = memberModifyService.memberUpdate(memberCommand, errors, model); 
 		return path;		
 	}
 	@RequestMapping("findPassword")
@@ -80,6 +99,19 @@ public class MemberEditController {
 		}
 		memberPasswordService.execute(memberCommand, model, session);
 		return "member/pwModifyOk";
+	}
+	@RequestMapping("memberUserDel")
+	public String memberUserDel() {
+		return "member/userDeletePw";
+	}
+	@RequestMapping("memberUserDelPro")
+	public String memberUserDelPro(
+			@RequestParam(value="userPw") String userPw,
+			Model model,
+			HttpSession session
+		) {
+		String path = memberUserDelService.execute(userPw, model, session);
+		return path;
 	}
 	
 	

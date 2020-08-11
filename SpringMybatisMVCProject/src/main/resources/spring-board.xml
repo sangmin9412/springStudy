@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation=
+		"http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+	<bean class="controller.board.BoardController"></bean>
+	<bean id="boardWriteService" class="service.board.BoardWriteService"></bean>
+	<bean id="boardRepository" class="repository.BoardRepository"></bean>
+	<bean id="boardListService" class="service.board.BoardListService"></bean>
+	<bean id="boardDetailService" class="service.board.BoardDetailService"></bean>
+	<bean id="boardModifyService" class="service.board.BoardModifyService"></bean>
+	<bean id="boardDeleteService" class="service.board.BoardDeleteService"></bean>
+</beans>

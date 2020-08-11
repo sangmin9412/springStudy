@@ -14,7 +14,7 @@ $(function(){
 		location.href="<c:url value='/edit/memberModify?userId=${memberCommand.userId }' />"
 	});
 	$("#memDel").click(function(){
-		location.href="memberUserDel.mem";
+		location.href="<c:url value='/edit/memberUserDel' />";
 	});
 	$("#pwModify").click(function(){
 		location.href="<c:url value='/edit/memberPwForm' />";

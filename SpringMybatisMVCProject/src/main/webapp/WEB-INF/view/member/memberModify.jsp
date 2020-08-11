@@ -19,6 +19,7 @@ $(function(){
 <body>
 <form:form name ="frm" id ="frm" method = "post" 
 	action ="memberModifyPro" commandName="memberCommand" >
+<input type="hidden" name="urlPath" value="${ urlPath }" />
 <form:hidden path="userId" />
 <form:hidden path="userName" />
 <form:hidden path="userBirth" />
