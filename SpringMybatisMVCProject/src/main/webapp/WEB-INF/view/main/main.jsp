@@ -68,7 +68,7 @@ $(function(){
 <a href="<c:url value="/login/logout" />">로그아웃</a>
 <a href="mem/memberList">회원리스트</a>
 <a href="qna/boardList">공지사항 게시판</a>
-<a href="lib/libBoardList">자료 게시판</a>
+<a href="lib/libBoard">자료 게시판</a>
 <a href="ans/ansBoardList"">답변형 게시판</a>
 <a href="gd/goodsList">상품목록</a>
 <a href="cb/commentList">댓글 게시판</a>
