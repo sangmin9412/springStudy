@@ -35,7 +35,14 @@
 	</update>
 	<delete id="deleteBoard" parameterType="board">
 		delete from board 
-		where board_num = #{boardNum}
+		<trim prefix="where" prefixOverrides="AND | OR">
+			<if test="boardNum != null">
+				and board_num = #{boardNum}
+			</if>
+			<if test="userId != null">
+				and user_id = #{userId}
+			</if>
+		</trim>
 	</delete>
 	<!-- 
 	<resultMap type="board" id="baseBoard">

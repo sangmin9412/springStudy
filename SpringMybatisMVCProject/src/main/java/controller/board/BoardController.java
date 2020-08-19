@@ -98,4 +98,14 @@ public class BoardController {
 		return boardDeleteService.boardDelete(boardCommand, errors);
 	}
 	
+	@RequestMapping(value = "qnaDelete")
+	public String boardDelete(
+				@RequestParam("boardNum") Integer boardNum,
+				@RequestParam("boardPass") String boardPass,
+				Model model,
+				HttpSession session
+			) {
+		return boardDeleteService.boardDelete(boardNum, boardPass, model, session);
+	}
+	
 }

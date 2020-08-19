@@ -25,11 +25,22 @@
 	
 	<!-- controller 없이 사용  -->
 	<mvc:view-controller path="/" view-name="index" />
-	
+	<!-- file upload를 위한 -->	
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="1000000000" />
 		<property name="maxInMemorySize" value="1000000000" />
 	</bean>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/edit/**"/>
+			<bean class="interceptor.AuthCheckIntercepter" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/mem/**"/>
+			<bean class="interceptor.AuthCheckIntercepter" />
+		</mvc:interceptor>
+	</mvc:interceptors>
 	
 	<!-- 암호화 할 때 사용 -->
 	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">

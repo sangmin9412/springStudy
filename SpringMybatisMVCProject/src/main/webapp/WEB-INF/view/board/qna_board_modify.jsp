@@ -6,9 +6,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 	<script type="text/javascript">
 	function modifyboard(){
 		modifyform.submit();
+	}
+	function delBoard() {
+		location.href = "qnaDelete?boardNum=" + $("#boardNum").val() + "&boardPass=" + $("#boardPass").val();
 	}
 	</script>
 </head>
@@ -44,7 +48,8 @@
 			<div align="center">비밀번호</div>
 		</td>
 		<td>
-			<form:password path="boardPass" />
+			<input type="password" name="boardPass" id="boardPass" />
+			${ err }
 		</td>
 	</tr>
 	
@@ -58,7 +63,7 @@
 		<td colspan="5">
 			<font size=2>
 			<a href="javascript:modifyboard()">[수정]</a>&nbsp;&nbsp;
-			<a href="boardDelete?boardNum=${boardCommand.boardNum }">[삭제]</a>&nbsp;&nbsp;
+			<a href="javascript:delBoard();">[삭제]</a>&nbsp;&nbsp;
 			<a href="javascript:history.go(-1)">[뒤로]</a>
 			</font>
 		</td>

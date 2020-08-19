@@ -24,6 +24,20 @@ $(function(){
 		$("#frm").submit();
 	});
 });
+
+function ajaxFunc() {
+	$.ajax({
+		url: "ajaxTest",
+		success: function(res, textStatus, request) {
+			console.log(1, res);
+			console.log(2, textStatus);
+			console.log(3, request);
+		},
+		error: function(e) {
+			console.log(e);
+		}
+	});
+}
 </script>
 </head>
 <body>
@@ -74,6 +88,9 @@ $(function(){
 <a href="cb/commentList">댓글 게시판</a>
 <a href="survey/survey">설문조사</a>
 <a href="survey/surveyForm">설문내용 등록</a>
+<a href="ajaxTest">ajaxTest</a>
+<a href="ajaxTest1">ajaxTest1</a>
+<a href="domino">dominoMain</a>
 </c:if>
 </body>
 </html>
