@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goodsMapper">
+	<sql id="basecolumn">
+		GOODS_NUM,
+		USER_ID,
+		GOODS_NAME, 
+		GOODS_PRICE, 
+		GOODS_CONTENT, 
+		GOODS_IMAGE,
+		IP_ADDR,
+		READ_COUNT,
+		GOODS_REGISTER
+	</sql>
+	<sql id="cartcolumns">
+		CART_NUM,
+		GOODS_NUM,
+		USER_ID,
+		GOODS_PRICE,
+		GOODS_IMAGE,
+		QTY,
+		TOTAL_PRICE,
+		GOODS_NAME
+	</sql>
+	
+	<resultMap type="model.GoodsDTO" id="dto">
+		<id column="GOODS_NUM" jdbcType="VARCHAR" property="goodsNum" />
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+		<result column="GOODS_PRICE" jdbcType="BIGINT" property="goodsPrice" />
+		<result column="GOODS_CONTENT" jdbcType="VARCHAR" property="goodsContent" />
+		<result column="GOODS_IMAGE" jdbcType="VARCHAR" property="goodsImage" />
+		<result column="IP_ADDR" jdbcType="VARCHAR" property="ipAddr" />
+		<result column="READ_COUNT" jdbcType="BIGINT" property="readCount" />
+		<result column="GOODS_NAME" jdbcType="VARCHAR" property="goodsName" />
+		<result column="GOODS_REGISTER" jdbcType="TIMESTAMP" property="goodsRegister" />
+	</resultMap>
+	
+	<insert id="goodsInsert" parameterType="model.GoodsDTO">
+		insert into goods(<include refid="basecolumn" />)
+		values(
+			#{goodsNum},
+			#{userId},
+			#{goodsName},
+			#{goodsPrice},
+			#{goodsContent},
+			#{goodsImage},
+			#{ipAddr},
+			0,
+			sysdate
+		)
+	</insert>
+	
+	<select id="getGoodsList" parameterType="model.GoodsDTO" resultType="model.GoodsDTO">
+		select *
+			from (
+				select rownum rn, <include refid="basecolumn" />
+				from (
+					select <include refid="basecolumn" />
+					from goods
+					<trim prefix="where" prefixOverrides="AND | OR">
+						<if test="goodsNum != null">
+							and goods_num = #{goodsNum}
+						</if>
+					</trim>
+					order by goods_register desc
+				)
+			)
+		<trim prefix="where" prefixOverrides="AND | OR">
+			<if test="startEndPageDTO != null">
+				rn between #{startEndPageDTO.startPage} and #{startEndPageDTO.endPage}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="getGoodsCount" resultType="int" >
+		select count(*) from goods
+	</select>
+	
+	<update id="goodsCartAdd" parameterType="model.CartDTO">
+		merge into cart c
+		using ( 
+			select goods_num 
+			from goods
+			where goods_num = #{goodsNum} 
+		) g
+		on ( 
+			c.goods_num = g.goods_num and c.user_id = #{userId} 
+		)
+		when matched then 
+			update set 
+				c.qty = c.qty + 1,
+				total_price = (c.qty + 1) * c.goods_price
+				
+		when not matched then
+			insert (
+				c.cart_num, 
+				c.user_id, 
+				c.goods_num, 
+				c.goods_name,
+				c.goods_price, 
+				c.goods_image,
+				c.qty,
+				c.total_price
+			)
+			values (
+				num_seq.nextval,
+				#{userId},
+				#{goodsNum},
+				#{goodsName},
+				#{goodsPrice},
+				#{goodsImage},
+				1,
+				#{goodsPrice}
+			)
+	</update>
+	
+	<select id="getCartList" parameterType="string" resultType="model.CartDTO" >
+		select <include refid="cartcolumns" /> , sum(total_price) over (PARTITION by user_id) as sumTotalPrice
+		from cart
+		where user_id = #{value}
+		order by cart_num desc
+	</select>
+	
+	<delete id="goodsCartRemove" parameterType="hashMap">
+		delete from cart
+		<where>
+			<if test="cartNums != null">
+				cart_num in 
+				<foreach collection="cartNums" item="cartNum" index="index" open="(" close=")" separator=",">
+					#{cartNum}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+	
+	<update id="goodsCartQtyUp" parameterType="long">
+		update cart
+		set qty = qty + 1,
+			total_price = (qty + 1) * goods_price
+		where cart_num = #{cartNum}
+	</update>
+	
+	<update id="goodsCartQtyDown" parameterType="long">
+		update cart
+		set qty = qty - 1,
+			total_price = (qty - 1) * goods_price
+		where cart_num = #{cartNum}
+	</update>
+	
+	<select id="getCartOne" parameterType="long" resultType="model.CartDTO" >
+		select <include refid="cartcolumns" />, (select sum(total_price) from cart group by user_id) as sumTotalPrice
+		from cart
+		where cart_num = #{cartNum}
+	</select>
+	
+	<update id="wishAdd" parameterType="model.WishDTO" useGeneratedKeys="false">
+		merge into wish w
+		using (
+			select goods_num
+			from goods
+			where goods_num = #{goodsNum}
+		) g
+		on (
+			w.goods_num = g.goods_num and w.user_id = #{userId}
+		)
+		when matched then
+			update set w.ck = 1111
+			delete where (
+				w.goods_num = #{goodsNum}
+				and w.user_id = #{userId}
+			)
+		when not matched then
+			insert (w.goods_num, w.user_id)
+			values (#{goodsNum}, #{userId})
+	</update>
+	
+	<select id="wishCount" parameterType="model.WishDTO" resultType="int">
+		select count(*) from wish
+		where goods_num = #{goodsNum} and user_id = #{userId}
+	</select>
+	
+	<select id="goodsWishList" parameterType="string" resultType="model.GoodsDTO">
+		select <include refid="basecolumn" />
+		from goods
+		where goods_num in (
+			select goods_num from wish
+			where user_id = #{userId}
+		)
+	</select>
+	<delete id="goodsDelete" parameterType="model.GoodsDTO">
+		delete from goods
+		where user_id = #{userId} and goods_num = #{goodsNum}
+	</delete>
+</mapper>

@@ -6,6 +6,33 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="../js/jquery.form.js"></script>
+<script>
+	function fileDel(orgFile, strFile, fileSize, el) {
+		$.ajax({
+			type: "post",
+			url: "fileDel",
+			dataType: "text",
+			data: {
+				originalFileName: orgFile,
+				storeFileName: strFile,
+				fileSize: fileSize,
+			},
+			success: function(res) {
+				console.log(res.trim());
+				if (res.indexOf("1") > -1) {
+					$(el).text("삭제취소");
+				} else {
+					$(el).text("삭제");
+				}
+			},
+			error: function(e) {
+				console.log(e);
+			}
+		});
+	}
+</script>
 </head>
 <body>
 <form:form action="libModifyPro" method="post" name="modifyform" commandName="libraryCommand" enctype="multipart/form-data" >
@@ -46,11 +73,23 @@
 		</td>
 	</tr>
 	
-	<tr bgcolor="cccccc">
-		<td colspan="2" style="height:1px;">
+	<tr>
+		<td>파일</td>
+		<td>
+			<c:forTokens items="${ libraryCommand.originalFileName }" delims="`" var="org" varStatus="cnt">
+				<a href="<c:url value="/lib_Board/upload/${ storeFileName[cnt.index] }" />">${ org } / ${ fileSize[cnt.index] }</a>
+				<button type="button" class="btn${ cnt.index }" onclick="fileDel('${ org }', '${ storeFileName[cnt.index] }', '${ fileSize[cnt.index] }', this)">삭제</button>
+				<br>
+			</c:forTokens>
 		</td>
 	</tr>
-	<tr><td colspan="2">&nbsp;</td></tr>
+	
+	<tr>
+		<td>파일 추가</td>
+		<td>
+			<input type="file" name="report" multiple="multiple" />
+		</td>
+	</tr>
 	
 	<tr align="center" valign="middle">
 		<td colspan="5">

@@ -40,6 +40,10 @@
 			<mvc:mapping path="/mem/**"/>
 			<bean class="interceptor.AuthCheckIntercepter" />
 		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/cart/**"/>
+			<bean class="interceptor.AuthCheckIntercepter" />
+		</mvc:interceptor>
 	</mvc:interceptors>
 	
 	<!-- 암호화 할 때 사용 -->

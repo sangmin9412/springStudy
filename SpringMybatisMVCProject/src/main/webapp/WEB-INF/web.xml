@@ -35,6 +35,7 @@ version="3.0">
   			classpath:spring-mail-config.xml
   			classpath:spring-library-beans.xml
   			classpath:spring-ajax-beans.xml
+  			classpath:spring-goods-beans.xml
   		</param-value>
   	</init-param>
   	<load-on-startup>1</load-on-startup>

@@ -17,4 +17,5 @@ public class LibraryCommand {
 	private String boardContent;
 	private String ipAddr;
 	private MultipartFile [] report;
+	
 }

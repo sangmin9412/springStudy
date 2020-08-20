@@ -78,6 +78,11 @@ from(select rownum rn , <include refid="baseColumns" />
 		<if test="boardContent != null">
 			board_content = #{boardContent},
 		</if>
+		<if test="originalFileName != null">
+			original_file_name = #{originalFileName},
+			store_file_name = #{storeFileName},
+			file_size = #{fileSize},
+		</if>
 	</trim> 
 	<trim prefix="where" prefixOverrides="AND | OR">
 		<if test="userId != null">

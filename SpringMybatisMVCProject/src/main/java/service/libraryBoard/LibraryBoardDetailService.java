@@ -38,6 +38,10 @@ public class LibraryBoardDetailService {
 		
 		if (dto != null) {
 			model.addAttribute("libraryCommand", dto);
+			String [] storeFileName = dto.getStoreFileName().split("`");
+			String [] fileSize = dto.getFileSize().split("`");
+			model.addAttribute("storeFileName", storeFileName);
+			model.addAttribute("fileSize", fileSize);
 			result = "lib_Board/lib_board_modify";
 		} else {
 			result = "redirect:/lib/libDetail/"+boardNum;
